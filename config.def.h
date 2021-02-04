@@ -106,6 +106,7 @@ static const char *dmenucmd[] = { "dmenu_run", "-m", dmenumon, "-fn", dmenufont,
 static const char *termcmd[]  = { "alacritty", NULL };
 static const char *firefox[]  = { "firefox", NULL };
 
+#include "shiftview.c"
 
 static Key keys[] = {
 	/* modifier                     key        function        argument */
@@ -125,7 +126,11 @@ static Key keys[] = {
 	{ MODKEY,                       XK_t,      setlayout,      {.v = &layouts[0]} },
 	{ MODKEY,                       XK_f,      setlayout,      {.v = &layouts[1]} },
 	{ MODKEY,                       XK_m,      setlayout,      {.v = &layouts[2]} },
-	{ MODKEY|ControlMask,		XK_comma,  cyclelayout,    {.i = -1 } },
+    { MODKEY,                       XK_g,      shiftview,      {.i = -1} },
+    { MODKEY|ShiftMask,             XK_g,      shifttag,       {.i = -1} },
+    { MODKEY,                   XK_semicolon,  shiftview,      {.i = 1} },
+    { MODKEY|ShiftMask,         XK_semicolon,  shifttag,       {.i = 1} },
+	{ MODKEY|ControlMask,		    XK_comma,  cyclelayout,    {.i = -1 } },
 	{ MODKEY|ControlMask,           XK_period, cyclelayout,    {.i = +1 } },
 	{ MODKEY,                       XK_space,  setlayout,      {0} },
 	{ MODKEY|ShiftMask,             XK_space,  togglefloating, {0} },
