@@ -14,17 +14,19 @@ static       int smartgaps          = 0;        /* 1 means no outer gap when the
 static const int showbar            = 1;        /* 0 means no bar */
 static const int topbar             = 1;        /* 0 means bottom bar */
 static const int user_bh            = 0;        /* 0 means that dwm will calculate bar height, >= 1 means dwm will user_bh as bar height */
-static const char *fonts[]          = { "monospace:size=10" };
+static const char *fonts[]          = {"Mononoki Nerd Font:size=10:antialias=true:autohint=true",
+                                        "JoyPixels:size=10:antialias=true:autohint=true"};
 static const char dmenufont[]       = "monospace:size=10";
 static const char col_gray1[]       = "#222222";
 static const char col_gray2[]       = "#444444";
 static const char col_gray3[]       = "#bbbbbb";
 static const char col_gray4[]       = "#eeeeee";
 static const char col_cyan[]        = "#005577";
+static const char col_pink[]        = "#ee2677";
 static const char *colors[][3]      = {
 	/*               fg         bg         border   */
 	[SchemeNorm] = { col_gray3, col_gray1, col_gray2 },
-	[SchemeSel]  = { col_gray4, col_cyan,  col_cyan  },
+	[SchemeSel]  = { col_gray4, col_cyan,  col_pink  },
 };
 
 typedef struct {
@@ -106,7 +108,7 @@ static const char *dmenucmd[] = { "dmenu_run", "-m", dmenumon, "-fn", dmenufont,
 static const char *termcmd[]  = { "alacritty", NULL };
 static const char *firefox[]  = { "firefox", NULL };
 
-/* #include <X11/XF86keysym.h> */
+#include <X11/XF86keysym.h>
 #include "shiftview.c"
 
 static Key keys[] = {
@@ -174,34 +176,15 @@ static Key keys[] = {
 	{ MODKEY|Mod1Mask,              XK_0,      togglegaps,     {0} },
 	{ MODKEY|Mod1Mask|ShiftMask,    XK_0,      defaultgaps,    {0} },
     /* fn keys */
-    /* { 0, XF86XK_AudioMute,		spawn,		SHCMD("pamixer -t; kill -44 $(pidof dwmblocks)") }, */
-	/* { 0, XF86XK_AudioRaiseVolume,	spawn,		SHCMD("pamixer --allow-boost -i 3; kill -44 $(pidof dwmblocks)") }, */
-	/* { 0, XF86XK_AudioLowerVolume,	spawn,		SHCMD("pamixer --allow-boost -d 3; kill -44 $(pidof dwmblocks)") }, */
-	/* { 0, XF86XK_AudioPrev,		spawn,		SHCMD("mpc prev") }, */
-	/* { 0, XF86XK_AudioNext,		spawn,		SHCMD("mpc next") }, */
-	/* { 0, XF86XK_AudioPause,		spawn,		SHCMD("mpc pause") }, */
-	/* { 0, XF86XK_AudioPlay,		spawn,		SHCMD("mpc play") }, */
-	/* { 0, XF86XK_AudioStop,		spawn,		SHCMD("mpc stop") }, */
-	/* { 0, XF86XK_AudioRewind,	spawn,		SHCMD("mpc seek -10") }, */
-	/* { 0, XF86XK_AudioForward,	spawn,		SHCMD("mpc seek +10") }, */
-	/* { 0, XF86XK_AudioMedia,		spawn,		SHCMD(TERMINAL " -e ncmpcpp") }, */
-	/* { 0, XF86XK_AudioMicMute,	spawn,		SHCMD("pactl set-source-mute @DEFAULT_SOURCE@ toggle") }, */
-	/* { 0, XF86XK_PowerOff,		spawn,		SHCMD("sysact") }, */
-	/* { 0, XF86XK_Calculator,		spawn,		SHCMD(TERMINAL " -e bc -l") }, */
-	/* { 0, XF86XK_Sleep,		spawn,		SHCMD("sudo -A zzz") }, */
-	/* { 0, XF86XK_WWW,		spawn,		SHCMD("$BROWSER") }, */
-	/* { 0, XF86XK_DOS,		spawn,		SHCMD(TERMINAL) }, */
-	/* { 0, XF86XK_ScreenSaver,	spawn,		SHCMD("slock & xset dpms force off; mpc pause; pauseallmpv") }, */
-	/* { 0, XF86XK_TaskPane,		spawn,		SHCMD(TERMINAL " -e htop") }, */
-	/* { 0, XF86XK_Mail,		spawn,		SHCMD(TERMINAL " -e neomutt ; pkill -RTMIN+12 dwmblocks") }, */
-	/* { 0, XF86XK_MyComputer,		spawn,		SHCMD(TERMINAL " -e lf /") }, */
-	/* /1* { 0, XF86XK_Battery,		spawn,		SHCMD("") }, *1/ */
-	/* { 0, XF86XK_Launch1,		spawn,		SHCMD("xset dpms force off") }, */
-	/* { 0, XF86XK_TouchpadToggle,	spawn,		SHCMD("(synclient | grep 'TouchpadOff.*1' && synclient TouchpadOff=0) || synclient TouchpadOff=1") }, */
-	/* { 0, XF86XK_TouchpadOff,	spawn,		SHCMD("synclient TouchpadOff=1") }, */
-	/* { 0, XF86XK_TouchpadOn,		spawn,		SHCMD("synclient TouchpadOff=0") }, */
-	/* { 0, XF86XK_MonBrightnessUp,	spawn,		SHCMD("xbacklight -inc 15") }, */
-	/* { 0, XF86XK_MonBrightnessDown,	spawn,		SHCMD("xbacklight -dec 15") }, */
+    { 0, XF86XK_AudioMute,		spawn,		SHCMD("amixer -q -D pulse sset Master toggle; kill -44 $(pidof dwmblocks)") },
+	{ 0, XF86XK_AudioRaiseVolume,	spawn,		SHCMD("amixer -c 0 sset Master 5%+ unmute; kill -44 $(pidof dwmblocks)") },
+	{ 0, XF86XK_AudioLowerVolume,	spawn,		SHCMD("amixer -c 0 sset Master 5%- unmute; kill -44 $(pidof dwmblocks)") },
+	{ 0, XF86XK_AudioPrev,		spawn,		SHCMD("playerctl previous") },
+	{ 0, XF86XK_AudioNext,		spawn,		SHCMD("playerctl next") },
+	{ 0, XF86XK_AudioPlay,		spawn,		SHCMD("playerctl play-pause") },
+	{ 0, XF86XK_AudioStop,		spawn,		SHCMD("playerctl stop") },
+	{ 0, XF86XK_MonBrightnessUp,	spawn,		SHCMD("xbacklight -inc 10") },
+	{ 0, XF86XK_MonBrightnessDown,	spawn,		SHCMD("xbacklight -dec 10") },
 
 
 };
