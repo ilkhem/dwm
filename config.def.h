@@ -71,10 +71,10 @@ static const Layout layouts[] = {
 	{ "|M|",      centeredmaster },
 	{ ">M>",      centeredfloatingmaster },
 	{ "[@]",      spiral },
+	{ "[\\]",     dwindle },
 	{ "[M]",      monocle },
+	{ "H[]",      deck },
 	{ "><>",      NULL },    /* no layout function means floating behavior */
-	/* { "[\\]",     dwindle }, */
-	/* { "H[]",      deck }, */
 	/* { "===",      bstackhoriz }, */
 	/* { "HHH",      grid }, */
 	/* { "###",      nrowgrid }, */
@@ -105,48 +105,64 @@ static const Layout layouts[] = {
 /* commands */
 static char dmenumon[2] = "0"; /* component of dmenucmd, manipulated in spawn() */
 static const char *dmenucmd[] = { "dmenu_run", "-m", dmenumon, "-fn", dmenufont, "-nb", col_gray1, "-nf", col_gray3, "-sb", col_cyan, "-sf", col_gray4, NULL };
-static const char *termcmd[]  = { "alacritty", NULL };
+static const char *termcmd[]  = { TERMINAL, NULL };
+/* my programs */
+static const char *rofirun[]  = { "rofi", "-show", "run", "-show-icons", "-config", "~/.config/rofi/themes/dmenu.rasi", NULL };
+static const char *rofidrun[] = { "rofi", "-show", "drun", "-show-icons", "-config", "~/.config/rofi/themes/center.rasi", NULL };
+static const char *rofiwin[]  = { "rofi", "-show", "window", "-show-icons", "-config", "~/.config/rofi/themes/center.rasi", NULL };
 static const char *firefox[]  = { "firefox", NULL };
+static const char *mail[]     = { "thunderbird", NULL };
+static const char *fileman[]  = { "thunar", NULL };
+static const char *emacs[]    = { "emacs", NULL };
+
 
 #include <X11/XF86keysym.h>
 #include "shiftview.c"
 
 static Key keys[] = {
 	/* modifier                     key        function        argument */
-	{ MODKEY,                       XK_p,      spawn,          {.v = dmenucmd } },
+    /* essentials */
+	{ MODKEY|ShiftMask|ControlMask, XK_Delete, quit,           {0} },
+	{ MODKEY|ShiftMask,             XK_r,      quit,           {1} },
+	{ MODKEY,                       XK_space,  spawn,          {.v = rofidrun } },
+	{ MODKEY,                       XK_p,      spawn,          {.v = rofirun } },
 	{ MODKEY,                       XK_Return, spawn,          {.v = termcmd } },
-    { MODKEY,                       XK_w,      spawn,          {.v = firefox } },
-	{ MODKEY,                       XK_b,      togglebar,      {0} },
+	{ MODKEY|ShiftMask,             XK_b,      togglebar,      {0} },
+    /* windows */
 	STACKKEYS(MODKEY,                          focus)
 	STACKKEYS(MODKEY|ShiftMask,                push)
+	{ MODKEY,                       XK_q,      killclient,     {0} },
+	{ MODKEY|ShiftMask,             XK_space,  togglefloating, {0} },
+    { MODKEY,                       XK_f,      togglefullscr,  {0} },
+	{ MODKEY,                       XK_s,      togglesticky,   {0} },
+	{ MODKEY|ShiftMask,    			XK_Return, togglescratch,  {.ui = 0 } },  /* terminal */
+	{ MODKEY,           	    XK_backslash,  togglescratch,  {.ui = 1 } },  /* ranger */
+	{ MODKEY|ControlMask,           XK_Return, zoom,           {0} },
+    /* layouts */
+	{ MODKEY|ControlMask,		    XK_comma,  cyclelayout,    {.i = -1 } },
+	{ MODKEY|ControlMask,           XK_period, cyclelayout,    {.i = +1 } },
+	{ MODKEY|ControlMask,           XK_space,  setlayout,      {0} },
+	{ MODKEY,                       XK_t,      setlayout,      {.v = &layouts[0]} },  /* tile */
+	{ MODKEY|ShiftMask,             XK_t,      setlayout,      {.v = &layouts[1]} },  /* bstack */
+	{ MODKEY,                       XK_y,      setlayout,      {.v = &layouts[2]} },  /* centeredmaster */
+	{ MODKEY|ShiftMask,             XK_y,      setlayout,      {.v = &layouts[3]} },  /* floating centeredmaster */
+	{ MODKEY,                       XK_u,      setlayout,      {.v = &layouts[4]} },  /* spiral */
+	{ MODKEY|ShiftMask,             XK_u,      setlayout,      {.v = &layouts[5]} },  /* dwindle */
+	{ MODKEY,                       XK_m,      setlayout,      {.v = &layouts[6]} },  /* monocle */
+	{ MODKEY|ShiftMask,             XK_m,      setlayout,      {.v = &layouts[7]} },  /* deck */
+	{ MODKEY|ShiftMask,             XK_f,      setlayout,      {.v = &layouts[8]} },  /* floating */
 	{ MODKEY,                       XK_i,      incnmaster,     {.i = +1 } },
-	{ MODKEY,                       XK_d,      incnmaster,     {.i = -1 } },
+	{ MODKEY,                       XK_o,      incnmaster,     {.i = -1 } },
 	{ MODKEY,                       XK_h,      setmfact,       {.f = -0.05} },
 	{ MODKEY,                       XK_l,      setmfact,       {.f = +0.05} },
-	{ MODKEY|ShiftMask,             XK_Return, zoom,           {0} },
+    /* tags */
 	{ MODKEY,                       XK_Tab,    view,           {0} },
-	{ MODKEY,                       XK_q,      killclient,     {0} },
-	{ MODKEY,                       XK_t,      setlayout,      {.v = &layouts[0]} },
-	{ MODKEY,                       XK_f,      setlayout,      {.v = &layouts[1]} },
-	{ MODKEY,                       XK_m,      setlayout,      {.v = &layouts[2]} },
     { MODKEY,                       XK_g,      shiftview,      {.i = -1} },
     { MODKEY|ShiftMask,             XK_g,      shifttag,       {.i = -1} },
     { MODKEY,                   XK_semicolon,  shiftview,      {.i = 1} },
     { MODKEY|ShiftMask,         XK_semicolon,  shifttag,       {.i = 1} },
-	{ MODKEY|ControlMask,		    XK_comma,  cyclelayout,    {.i = -1 } },
-	{ MODKEY|ControlMask,           XK_period, cyclelayout,    {.i = +1 } },
-	{ MODKEY,                       XK_space,  setlayout,      {0} },
-	{ MODKEY|ShiftMask,             XK_space,  togglefloating, {0} },
-    { MODKEY|ShiftMask,             XK_f,      togglefullscr,  {0} },
-	{ MODKEY,                       XK_s,      togglesticky,   {0} },
 	{ MODKEY,                       XK_0,      view,           {.ui = ~0 } },
 	{ MODKEY|ShiftMask,             XK_0,      tag,            {.ui = ~0 } },
-	{ MODKEY,                       XK_comma,  focusmon,       {.i = -1 } },
-	{ MODKEY,                       XK_period, focusmon,       {.i = +1 } },
-	{ MODKEY|ShiftMask,             XK_comma,  tagmon,         {.i = -1 } },
-	{ MODKEY|ShiftMask,             XK_period, tagmon,         {.i = +1 } },
-	{ MODKEY,            			XK_y,  	   togglescratch,  {.ui = 0 } },
-	{ MODKEY,            			XK_u,	   togglescratch,  {.ui = 1 } },
 	TAGKEYS(                        XK_1,                      0)
 	TAGKEYS(                        XK_2,                      1)
 	TAGKEYS(                        XK_3,                      2)
@@ -156,8 +172,11 @@ static Key keys[] = {
 	TAGKEYS(                        XK_7,                      6)
 	TAGKEYS(                        XK_8,                      7)
 	TAGKEYS(                        XK_9,                      8)
-	{ MODKEY|ShiftMask,             XK_q,      quit,           {0} },
-	{ MODKEY|ShiftMask,             XK_r,      quit,           {1} },
+    /* monitors */
+	{ MODKEY,                       XK_comma,  focusmon,       {.i = -1 } },
+	{ MODKEY,                       XK_period, focusmon,       {.i = +1 } },
+	{ MODKEY|ShiftMask,             XK_comma,  tagmon,         {.i = -1 } },
+	{ MODKEY|ShiftMask,             XK_period, tagmon,         {.i = +1 } },
     /* vanity gaps */
 	{ MODKEY|Mod1Mask,              XK_u,      incrgaps,       {.i = +1 } },
 	{ MODKEY|Mod1Mask|ShiftMask,    XK_u,      incrgaps,       {.i = -1 } },
@@ -175,6 +194,16 @@ static Key keys[] = {
 	{ MODKEY|Mod1Mask|ShiftMask,    XK_9,      incrovgaps,     {.i = -1 } },
 	{ MODKEY|Mod1Mask,              XK_0,      togglegaps,     {0} },
 	{ MODKEY|Mod1Mask|ShiftMask,    XK_0,      defaultgaps,    {0} },
+    /* spawn programs */
+    { MODKEY,                       XK_w,      spawn,          {.v = firefox } },
+	{ MODKEY,            			XK_b,  	   spawn,          {.v = mail } },
+	{ MODKEY,            			XK_r,  	   spawn,          {.v = fileman } },
+	{ MODKEY,            			XK_e,  	   spawn,          {.v = emacs } },
+    /*custom scripts */
+	{ Mod1Mask|ControlMask,         XK_space,  spawn,          SHCMD("dmenu-emoji") },
+	{ Mod1Mask|ControlMask,         XK_e,      spawn,          SHCMD("dmenu-edit-config") },
+	{ Mod1Mask|ControlMask,         XK_s,      spawn,          SHCMD("dmenu-scrot") },
+	{ Mod1Mask|ControlMask,         XK_p,      spawn,          SHCMD("change-screen-config") },
     /* fn keys */
     { 0, XF86XK_AudioMute,		spawn,		SHCMD("amixer -q -D pulse sset Master toggle; kill -44 $(pidof dwmblocks)") },
 	{ 0, XF86XK_AudioRaiseVolume,	spawn,		SHCMD("amixer -c 0 sset Master 5%+ unmute; kill -44 $(pidof dwmblocks)") },
