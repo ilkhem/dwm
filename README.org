@@ -46,3 +46,27 @@ In order to display status info in the bar, you can do something like this in yo
 
 ** Configuration
 The configuration of =dwm= is done by creating a custom =config.h= and (re)compiling the source code.
+
+* About my build
+
+** Features
+My build of =dwm= is patched to include some nice features:
+- clickable status bar using =dwmblocks= and the =statuscmd= patch (I forked Luke Smith's =dwmblocks= build).
+- sticky windows.
+- vacant tags are hidden, but the little boxes are still displayed.
+- multiple scratchpads (a terminal emulator and a terminal-based file manager).
+- =shiftview= but patched to only shift to occupied tags (copied from Luke Smith).
+- keybinding to restart =dwm= using the =restartsig= patch.
+- gaps with granular control using the vanitygaps patch.
+- adjustable bar height using the bar height patch.
+- possibility to cycle between layouts using the cyclelayout patch.
+- new windows spawn right after the currently focused window in the stack using the attachbelow patch.
+- advanced stack control using the stacker patch.
+
+** Missing features
+The current build satisfies all my needs, but there are certain nice to have features that caught mu eye, which I'll be patching in when I find the time:
+- [ ] colours in the status bar.
+- [ ] a single tag-set shared between all my monitors (similar behaviour to qtile and spectrwm, which were my intro to tiling window managers) using the single-tagset patch
+- [ ] a different colour for the border of floating windows using float-border-color.
+- [ ] spawn rules for windows, and the ability to switch to tags with newly spawn windows using the switchtotag patch.
+- [ ] the ability to jump to urgent windows using focusurgent patch. It would also be nice to have a different foreground colour for tags with urgent windows.
