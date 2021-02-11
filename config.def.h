@@ -126,8 +126,10 @@ static Key keys[] = {
 	{ MODKEY|ShiftMask,             XK_r,      quit,           {1} },
 	{ MODKEY,                       XK_space,  spawn,          {.v = rofidrun } },
 	{ MODKEY,                       XK_p,      spawn,          {.v = rofirun } },
+	{ Mod1Mask,                     XK_Tab,    spawn,          {.v = rofiwin } },
 	{ MODKEY,                       XK_Return, spawn,          {.v = termcmd } },
 	{ MODKEY|ShiftMask,             XK_b,      togglebar,      {0} },
+	{ MODKEY,                       XK_x,      spawn,          SHCMD("pmenu") },
     /* windows */
 	STACKKEYS(MODKEY,                          focus)
 	STACKKEYS(MODKEY|ShiftMask,                push)
@@ -200,10 +202,12 @@ static Key keys[] = {
 	{ MODKEY,            			XK_r,  	   spawn,          {.v = fileman } },
 	{ MODKEY,            			XK_e,  	   spawn,          {.v = emacs } },
     /*custom scripts */
+	{ MODKEY|Mod1Mask,              XK_space,  spawn,          SHCMD("dmenu-find") },
 	{ Mod1Mask|ControlMask,         XK_space,  spawn,          SHCMD("dmenu-emoji") },
 	{ Mod1Mask|ControlMask,         XK_e,      spawn,          SHCMD("dmenu-edit-config") },
 	{ Mod1Mask|ControlMask,         XK_s,      spawn,          SHCMD("dmenu-scrot") },
 	{ Mod1Mask|ControlMask,         XK_p,      spawn,          SHCMD("change-screen-config") },
+	{ Mod1Mask|ControlMask,         XK_k,      spawn,          SHCMD("nextkbd; kill -64 $(pidof dwmblocks)") },
     /* fn keys */
     { 0, XF86XK_AudioMute,		spawn,		SHCMD("amixer -q -D pulse sset Master toggle; kill -44 $(pidof dwmblocks)") },
 	{ 0, XF86XK_AudioRaiseVolume,	spawn,		SHCMD("amixer -c 0 sset Master 5%+ unmute; kill -44 $(pidof dwmblocks)") },
