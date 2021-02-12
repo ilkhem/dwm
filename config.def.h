@@ -23,10 +23,11 @@ static const char col_gray3[]       = "#bbbbbb";
 static const char col_gray4[]       = "#eeeeee";
 static const char col_cyan[]        = "#005577";
 static const char col_pink[]        = "#ee2677";
+static const char col_orange[]      = "#c68e15";
 static const char *colors[][3]      = {
 	/*               fg         bg         border   */
 	[SchemeNorm] = { col_gray3, col_gray1, col_gray2 },
-	[SchemeSel]  = { col_gray4, col_cyan,  col_pink  },
+	[SchemeSel]  = { col_gray4, col_orange,  col_orange },
 };
 
 typedef struct {
@@ -159,9 +160,13 @@ static Key keys[] = {
 	{ MODKEY,                       XK_l,      setmfact,       {.f = +0.05} },
     /* tags */
 	{ MODKEY,                       XK_Tab,    view,           {0} },
+    { MODKEY,                       XK_Left,   shiftview,      {.i = -1} },
+    { MODKEY,                       XK_Right,  shiftview,      {.i = 1} },
     { MODKEY,                       XK_g,      shiftview,      {.i = -1} },
-    { MODKEY|ShiftMask,             XK_g,      shifttag,       {.i = -1} },
     { MODKEY,                   XK_semicolon,  shiftview,      {.i = 1} },
+    { MODKEY|ShiftMask,             XK_Left,   shifttag,       {.i = -1} },
+    { MODKEY|ShiftMask,             XK_Right,  shifttag,       {.i = 1} },
+    { MODKEY|ShiftMask,             XK_g,      shifttag,       {.i = -1} },
     { MODKEY|ShiftMask,         XK_semicolon,  shifttag,       {.i = 1} },
 	{ MODKEY,                       XK_0,      view,           {.ui = ~0 } },
 	{ MODKEY|ShiftMask,             XK_0,      tag,            {.ui = ~0 } },
