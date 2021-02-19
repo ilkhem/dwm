@@ -217,6 +217,7 @@ static Key keys[] = {
 	{ Mod1Mask|ControlMask,         XK_space,  spawn,          SHCMD("dmenu-emoji") },
 	{ Mod1Mask|ControlMask,         XK_e,      spawn,          SHCMD("dmenu-edit-config") },
 	{ Mod1Mask|ControlMask,         XK_s,      spawn,          SHCMD("dmenu-scrot") },
+	{ Mod1Mask|ControlMask,         XK_x,      spawn,          SHCMD("bwmenu") },
 	{ Mod1Mask|ControlMask,         XK_p,      spawn,          SHCMD("change-screen-config") },
 	{ Mod1Mask|ControlMask,         XK_k,      spawn,          SHCMD("nextkbd; kill -64 $(pidof dwmblocks)") },
     /* fn keys */
