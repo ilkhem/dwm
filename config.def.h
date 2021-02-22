@@ -42,10 +42,12 @@ typedef struct {
 } Sp;
 const char *spcmd1[] = {TERMINAL, "-n", "spterm", "-g", "120x34", NULL };
 const char *spcmd2[] = {TERMINAL, "-n", "spfm", "-g", "144x41", "-e", "ranger", NULL };
+const char *spcmd3[] = {TERMINAL, "-n", "spmutt", "-g", "144x41", "-e", "neomutt", NULL };
 static Sp scratchpads[] = {
 	/* name          cmd  */
 	{"spterm",      spcmd1},
-	{"spranger",    spcmd2},
+	{"spfm",    spcmd2},
+	{"spmutt",    spcmd3},
 };
 
 /* tagging */
@@ -60,6 +62,7 @@ static const Rule rules[] = {
 	{ "Firefox",  NULL,			NULL,		1 << 8,			0,			 -1 },
 	{ NULL,		  "spterm",		NULL,		SPTAG(0),		1,			 -1 },
 	{ NULL,		  "spfm",		NULL,		SPTAG(1),		1,			 -1 },
+	{ NULL,		  "spmutt",		NULL,		SPTAG(2),		1,			 -1 },
 };
 
 /* layout(s) */
@@ -146,6 +149,7 @@ static Key keys[] = {
 	{ MODKEY,                       XK_s,      togglesticky,   {0} },
 	{ MODKEY|ShiftMask,    			XK_Return, togglescratch,  {.ui = 0 } },  /* terminal */
 	{ MODKEY,           	    XK_backslash,  togglescratch,  {.ui = 1 } },  /* ranger */
+	{ MODKEY,           	        XK_n,      togglescratch,  {.ui = 2 } },  /* mutt */
 	{ MODKEY|ControlMask,           XK_Return, zoom,           {0} },
     /* layouts */
 	{ MODKEY|ControlMask,		    XK_comma,  cyclelayout,    {.i = -1 } },
